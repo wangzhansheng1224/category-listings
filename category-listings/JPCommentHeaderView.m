@@ -34,6 +34,10 @@
         _groupImageV.image=[UIImage imageNamed:@"catalogs_arrow"];
         _groupImageV.center=CGPointMake(SCREEN_WIDTH-50, 35);
         [self.contentView addSubview:_groupImageV];
+        
+        UIImageView *lineImageV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 69.5, SCREEN_WIDTH, 0.5)];
+        lineImageV.backgroundColor=[UIColor colorWithWhite:0.95 alpha:1];
+        [self.contentView addSubview:lineImageV];
     }
     return self;
 }
