@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "JPCommentHeaderView.h"
 #import "WZSTableViewCell.h"
+#import "UIImageView+WebCache.h"
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define UICOLOR_RGBA(r, g, b, a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
@@ -41,8 +42,6 @@ static NSString * const WZSCell = @"Cell";
     [self.view addSubview:self.tableView];
     //注册自定义组头
     [self.tableView registerClass:[JPCommentHeaderView class] forHeaderFooterViewReuseIdentifier:JPHeaderId];
-    //注册自定义Cell
-    [self.tableView registerClass:[WZSTableViewCell class] forCellReuseIdentifier:WZSCell];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -74,6 +73,9 @@ static NSString * const WZSCell = @"Cell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     WZSTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:WZSCell];
+    if (!cell) {
+        cell = [[WZSTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:WZSCell];
+    }
     cell.detailArr=_classifyArr[indexPath.section][@"tags"];
     [cell createButton];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -87,6 +89,8 @@ static NSString * const WZSCell = @"Cell";
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     JPCommentHeaderView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:JPHeaderId];
     header.groupLabel.text=_classifyArr[section][@"name"];
+    NSString *url=_classifyArr[section][@"icon_f"];
+    [header.groupLeftV sd_setImageWithURL:[NSURL URLWithString:url]];
     header.tag=section+1000;
     header.delegate=self;
     return header;
@@ -94,7 +98,6 @@ static NSString * const WZSCell = @"Cell";
 
 -(void)AddOrDelete:(NSInteger)tag andselected:(BOOL)selected{
     _NowNum=tag;
-//    [self.tableView setContentOffset:CGPointMake(0, 400) animated:YES];
     if (!_first) {
         NSMutableArray* rowToInsert = [[NSMutableArray alloc] init];
         NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];

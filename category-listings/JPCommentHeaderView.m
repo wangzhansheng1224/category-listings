@@ -23,7 +23,6 @@
         
         _groupLeftV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 40, 40)];
         _groupLeftV.center=CGPointMake(35, 35);
-        _groupLeftV.backgroundColor=[UIColor redColor];
         [self.contentView addSubview:_groupLeftV];
         
         _groupLabel=[[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_groupLeftV.frame)+10, 0, SCREEN_WIDTH, 70)];
