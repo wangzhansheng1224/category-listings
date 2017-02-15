@@ -17,11 +17,16 @@
         
         self.contentView.backgroundColor = [UIColor whiteColor];
         
-        UIButton *groupBtn=[[UIButton alloc]initWithFrame:CGRectMake(0, 5, SCREEN_WIDTH, 60)];
+        UIButton * groupBtn=[[UIButton alloc]initWithFrame:CGRectMake(0, 5, SCREEN_WIDTH, 60)];
         [groupBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:groupBtn];
         
-        _groupLabel=[[UILabel alloc]initWithFrame:CGRectMake(30, 0, SCREEN_WIDTH, 70)];
+        _groupLeftV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 40, 40)];
+        _groupLeftV.center=CGPointMake(35, 35);
+        _groupLeftV.backgroundColor=[UIColor redColor];
+        [self.contentView addSubview:_groupLeftV];
+        
+        _groupLabel=[[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_groupLeftV.frame)+10, 0, SCREEN_WIDTH, 70)];
         _groupLabel.font=[UIFont systemFontOfSize:17];
         _groupLabel.textColor=[UIColor colorWithWhite:0.1 alpha:1];
         [self.contentView addSubview:_groupLabel];

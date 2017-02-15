@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D202539D1E54015B00448642 /* WZSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D202539C1E54015B00448642 /* WZSTableViewCell.m */; };
-		D202539F1E5410C600448642 /* RecipesCatalog.plist in Resources */ = {isa = PBXBuildFile; fileRef = D202539E1E5410C600448642 /* RecipesCatalog.plist */; };
 		D24013A01E5151A5009DC1DD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D240139F1E5151A5009DC1DD /* main.m */; };
 		D24013A31E5151A5009DC1DD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D24013A21E5151A5009DC1DD /* AppDelegate.m */; };
 		D24013A61E5151A5009DC1DD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D24013A51E5151A5009DC1DD /* ViewController.m */; };
@@ -18,6 +17,7 @@
 		D24013B91E5151A5009DC1DD /* category_listingsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D24013B81E5151A5009DC1DD /* category_listingsTests.m */; };
 		D24013C41E5151A6009DC1DD /* category_listingsUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D24013C31E5151A6009DC1DD /* category_listingsUITests.m */; };
 		D250C9981E52A33600D941EA /* JPCommentHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D250C9971E52A33600D941EA /* JPCommentHeaderView.m */; };
+		D2A1A8AA1E544DF400DA2D0B /* RecipesCatalog.plist in Resources */ = {isa = PBXBuildFile; fileRef = D2A1A8A91E544DF400DA2D0B /* RecipesCatalog.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +40,6 @@
 /* Begin PBXFileReference section */
 		D202539B1E54015B00448642 /* WZSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZSTableViewCell.h; sourceTree = "<group>"; };
 		D202539C1E54015B00448642 /* WZSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZSTableViewCell.m; sourceTree = "<group>"; };
-		D202539E1E5410C600448642 /* RecipesCatalog.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = RecipesCatalog.plist; sourceTree = "<group>"; };
 		D240139B1E5151A5009DC1DD /* category-listings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "category-listings.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D240139F1E5151A5009DC1DD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D24013A11E5151A5009DC1DD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -59,6 +58,7 @@
 		D24013C51E5151A6009DC1DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D250C9961E52A33600D941EA /* JPCommentHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCommentHeaderView.h; sourceTree = "<group>"; };
 		D250C9971E52A33600D941EA /* JPCommentHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCommentHeaderView.m; sourceTree = "<group>"; };
+		D2A1A8A91E544DF400DA2D0B /* RecipesCatalog.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = RecipesCatalog.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,7 +117,7 @@
 				D250C9971E52A33600D941EA /* JPCommentHeaderView.m */,
 				D202539B1E54015B00448642 /* WZSTableViewCell.h */,
 				D202539C1E54015B00448642 /* WZSTableViewCell.m */,
-				D202539E1E5410C600448642 /* RecipesCatalog.plist */,
+				D2A1A8A91E544DF400DA2D0B /* RecipesCatalog.plist */,
 				D24013A71E5151A5009DC1DD /* Main.storyboard */,
 				D24013AA1E5151A5009DC1DD /* Assets.xcassets */,
 				D24013AC1E5151A5009DC1DD /* LaunchScreen.storyboard */,
@@ -220,6 +220,7 @@
 				TargetAttributes = {
 					D240139A1E5151A5009DC1DD = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = CYFB6JG5FT;
 						ProvisioningStyle = Automatic;
 					};
 					D24013B31E5151A5009DC1DD = {
@@ -259,7 +260,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D202539F1E5410C600448642 /* RecipesCatalog.plist in Resources */,
+				D2A1A8AA1E544DF400DA2D0B /* RecipesCatalog.plist in Resources */,
 				D24013AE1E5151A5009DC1DD /* LaunchScreen.storyboard in Resources */,
 				D24013AB1E5151A5009DC1DD /* Assets.xcassets in Resources */,
 				D24013A91E5151A5009DC1DD /* Main.storyboard in Resources */,
@@ -438,6 +439,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = CYFB6JG5FT;
 				INFOPLIST_FILE = "category-listings/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.smart.im.category-listings";
@@ -449,6 +451,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = CYFB6JG5FT;
 				INFOPLIST_FILE = "category-listings/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.smart.im.category-listings";

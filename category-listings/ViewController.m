@@ -17,7 +17,9 @@
 @property (nonatomic, strong) NSArray *detailArr;
 @property (nonatomic, strong) NSArray *classifyArr;
 @property (nonatomic, strong) NSMutableArray *selectedArr;
-@property (nonatomic, assign) BOOL isOpen;
+@property (nonatomic, assign) NSInteger LastNum;
+@property (nonatomic, assign) NSInteger NowNum;
+@property (nonatomic, assign) BOOL first;
 @end
 
 @implementation ViewController
@@ -25,9 +27,11 @@ static NSString * const JPHeaderId = @"header";
 static NSString * const WZSCell = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _LastNum=999;
+    _NowNum=999;
     self.title=@"全部分类";
-    _detailArr=@[@"牛肉",@"排骨",@"鸡肉",@"苹果",@"西红柿",@"黄瓜",@"豌豆",@"茄子",@"糯米",@"羊肉",@"南瓜",@"茭白",@"山楂",@"毛豆",@"芋头",@"土豆"];
-    _classifyArr=@[@"时令食材",@"热门",@"口味",@"蔬菜",@"肉类",@"水产",@"主食",@"菜系",@"神奇芝士",@"烘焙天堂",@"母婴专区",@"食疗养生",@"美容瘦身",@"蛋奶豆制品",@"水果干果",@"米面杂粮",@"烹饪方法及工具"];
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"RecipesCatalog" ofType:@"plist"];
+    _classifyArr = [NSArray arrayWithContentsOfFile:plistPath][0];
     
     self.tableView = [[UITableView alloc]initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
     self.tableView.delegate=self;
@@ -43,9 +47,17 @@ static NSString * const WZSCell = @"Cell";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    for (NSInteger i=0; i<_selectedArr.count; i++) {
-        if (section==[_selectedArr[i] integerValue]) {
+    if (!_first) {
+        if (_NowNum-1000==section) {
             return 1;
+        }
+    }else{
+        if (_NowNum==_LastNum) {
+            return 0;
+        }else{
+            if (section==_NowNum-1000) {
+                return 1;
+            }
         }
     }
     return 0;
@@ -56,13 +68,15 @@ static NSString * const WZSCell = @"Cell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return (_detailArr.count/3+1)*50+10;
+    NSArray *abc=_classifyArr[indexPath.section][@"tags"];
+    return ((abc.count-1)/3+1)*50+10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     WZSTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:WZSCell];
-    cell.detailArr=_detailArr;
+    cell.detailArr=_classifyArr[indexPath.section][@"tags"];
     [cell createButton];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -72,30 +86,55 @@ static NSString * const WZSCell = @"Cell";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     JPCommentHeaderView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:JPHeaderId];
-    header.groupLabel.text=_classifyArr[section];
-    header.tag=section;
+    header.groupLabel.text=_classifyArr[section][@"name"];
+    header.tag=section+1000;
     header.delegate=self;
     return header;
 }
 
 -(void)AddOrDelete:(NSInteger)tag andselected:(BOOL)selected{
-    NSNumber *objNum = [NSNumber numberWithInteger:tag];
-    if (selected) {
-        [self.selectedArr addObject:objNum];
+    _NowNum=tag;
+//    [self.tableView setContentOffset:CGPointMake(0, 400) animated:YES];
+    if (!_first) {
         NSMutableArray* rowToInsert = [[NSMutableArray alloc] init];
-        NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:tag];
+        NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
         [rowToInsert addObject:indexPathToInsert];
         [self.tableView beginUpdates];
         [self.tableView insertRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView endUpdates];
-    }else{
-        [self.selectedArr removeObject:objNum];
+        _LastNum=_NowNum;
+        _first=YES;
+        return;
+    }
+    if (_NowNum==_LastNum) {
         NSMutableArray* rowToInsert = [[NSMutableArray alloc] init];
-        NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:tag];
+        NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
         [rowToInsert addObject:indexPathToInsert];
         [self.tableView beginUpdates];
         [self.tableView deleteRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView endUpdates];
+        _first=NO;
+    }else{
+        NSMutableArray* rowToInsert = [[NSMutableArray alloc] init];
+        NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
+        [rowToInsert addObject:indexPathToInsert];
+        
+        NSMutableArray* rowToInsert2 = [[NSMutableArray alloc] init];
+        NSIndexPath* indexPathToInsert2 = [NSIndexPath indexPathForRow:0 inSection:_LastNum-1000];
+        [rowToInsert2 addObject:indexPathToInsert2];
+        
+        JPCommentHeaderView *header = [self.view viewWithTag:_LastNum];
+        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
+            CGAffineTransform currentTransform = header.groupImageV.transform;
+            // 在现在的基础上旋转指定角度
+            CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, -M_PI);
+            header.groupImageV.transform = newTransform;
+        }completion:nil];
+        [self.tableView beginUpdates];
+        [self.tableView insertRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView deleteRowsAtIndexPaths:rowToInsert2 withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView endUpdates];
+        _LastNum=_NowNum;
     }
 }
 

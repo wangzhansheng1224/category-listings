@@ -27,7 +27,7 @@
         UIButton *btn=[[UIButton alloc]initWithFrame:CGRectMake(10+((SCREEN_WIDTH-40)/3+10)*a, 10+50*b, (SCREEN_WIDTH-40)/3, 40)];
         btn.backgroundColor=[UIColor whiteColor];
         btn.titleLabel.font=[UIFont systemFontOfSize:14];
-        [btn setTitle:_detailArr[i] forState:UIControlStateNormal];
+        [btn setTitle:_detailArr[i][@"t"] forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor colorWithWhite:0.1 alpha:1] forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:btn];
