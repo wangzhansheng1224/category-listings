@@ -17,19 +17,16 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *detailArr;
 @property (nonatomic, strong) NSArray *classifyArr;
-@property (nonatomic, strong) NSMutableArray *selectedArr;
 @property (nonatomic, assign) NSInteger LastNum;
 @property (nonatomic, assign) NSInteger NowNum;
 @property (nonatomic, assign) BOOL first;
 @end
 
-@implementation ViewController
 static NSString * const JPHeaderId = @"header";
-static NSString * const WZSCell = @"Cell";
+
+@implementation ViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _LastNum=999;
-    _NowNum=999;
     self.title=@"全部分类";
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"RecipesCatalog" ofType:@"plist"];
     _classifyArr = [NSArray arrayWithContentsOfFile:plistPath][0];
@@ -72,9 +69,12 @@ static NSString * const WZSCell = @"Cell";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    WZSTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:WZSCell];
-    if (!cell) {
-        cell = [[WZSTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:WZSCell];
+    
+    NSString *CellIdentifier = [NSString stringWithFormat:@"Cell%ld%ld",indexPath.section,indexPath.row];//以indexPath来唯一确定cell
+    
+    WZSTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[WZSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     cell.detailArr=_classifyArr[indexPath.section][@"tags"];
     [cell createButton];
@@ -96,14 +96,14 @@ static NSString * const WZSCell = @"Cell";
     return header;
 }
 
--(void)AddOrDelete:(NSInteger)tag andselected:(BOOL)selected{
+-(void)AddOrDelete:(NSInteger)tag{
     _NowNum=tag;
     if (!_first) {
         NSMutableArray* rowToInsert = [[NSMutableArray alloc] init];
         NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
         [rowToInsert addObject:indexPathToInsert];
         [self.tableView beginUpdates];
-        [self.tableView insertRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView insertRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
         _LastNum=_NowNum;
         _first=YES;
@@ -114,7 +114,7 @@ static NSString * const WZSCell = @"Cell";
         NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
         [rowToInsert addObject:indexPathToInsert];
         [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView deleteRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
         _first=NO;
     }else{
@@ -141,12 +141,6 @@ static NSString * const WZSCell = @"Cell";
     }
 }
 
-- (NSMutableArray *)selectedArr{
-    if (!_selectedArr) {
-        _selectedArr=[[NSMutableArray alloc]init];
-    }
-    return _selectedArr;
-}
 
 
 - (void)didReceiveMemoryWarning {

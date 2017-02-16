@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @protocol SectionDelegate <NSObject>
 //协议方法
--(void)AddOrDelete:(NSInteger)tag andselected:(BOOL)selected;
+-(void)AddOrDelete:(NSInteger)tag;
 @end
 
 @interface JPCommentHeaderView : UITableViewHeaderFooterView

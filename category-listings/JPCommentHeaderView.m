@@ -18,7 +18,7 @@
         self.contentView.backgroundColor = [UIColor whiteColor];
         
         UIButton * groupBtn=[[UIButton alloc]initWithFrame:CGRectMake(0, 5, SCREEN_WIDTH, 60)];
-        [groupBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [groupBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:groupBtn];
         
         _groupLeftV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 40, 40)];
@@ -42,8 +42,7 @@
     return self;
 }
 
-- (void)btnClick:(UIButton *)btn{
-    btn.selected=!btn.selected;
+- (void)btnClick{
     
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
         CGAffineTransform currentTransform = _groupImageV.transform;
@@ -52,8 +51,8 @@
         _groupImageV.transform = newTransform;
     }completion:nil];
     
-    if ([self.delegate respondsToSelector:@selector(AddOrDelete:andselected:)]){
-        [self.delegate AddOrDelete:self.tag andselected:btn.selected];
+    if ([self.delegate respondsToSelector:@selector(AddOrDelete:)]){
+        [self.delegate AddOrDelete:self.tag];
     }
 }
 
