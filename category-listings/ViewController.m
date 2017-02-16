@@ -28,6 +28,9 @@ static NSString * const JPHeaderId = @"header";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title=@"全部分类";
+    self.navigationController.navigationBar.barTintColor=[UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes=@{NSFontAttributeName:[UIFont fontWithName:@"Geeza Pro" size:17.0],NSForegroundColorAttributeName:[UIColor colorWithWhite:0.3 alpha:1]};
+    
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"RecipesCatalog" ofType:@"plist"];
     _classifyArr = [NSArray arrayWithContentsOfFile:plistPath][0];
     
@@ -107,6 +110,8 @@ static NSString * const JPHeaderId = @"header";
         [self.tableView endUpdates];
         _LastNum=_NowNum;
         _first=YES;
+        NSIndexPath* aaaa = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
+        [self.tableView scrollToRowAtIndexPath:aaaa atScrollPosition:UITableViewScrollPositionTop animated:YES];
         return;
     }
     if (_NowNum==_LastNum) {
@@ -138,6 +143,8 @@ static NSString * const JPHeaderId = @"header";
         [self.tableView deleteRowsAtIndexPaths:rowToInsert2 withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView endUpdates];
         _LastNum=_NowNum;
+        NSIndexPath* currentSection = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
+        [self.tableView scrollToRowAtIndexPath:currentSection atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
 }
 

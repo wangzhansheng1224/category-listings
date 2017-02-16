@@ -27,7 +27,7 @@
         
         _groupLabel=[[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(_groupLeftV.frame)+10, 0, SCREEN_WIDTH, 70)];
         _groupLabel.font=[UIFont systemFontOfSize:17];
-        _groupLabel.textColor=[UIColor colorWithWhite:0.1 alpha:1];
+        _groupLabel.textColor=[UIColor colorWithWhite:0.3 alpha:1];
         [self.contentView addSubview:_groupLabel];
         
         _groupImageV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 13, 8)];
