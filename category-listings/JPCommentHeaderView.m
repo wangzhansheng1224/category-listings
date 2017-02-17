@@ -47,6 +47,7 @@
         // 在现在的基础上旋转指定角度
         CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, -M_PI);
         _groupImageV.transform = newTransform;
+//        _groupImageV.transform = CGAffineTransformRotate(_groupImageV.transform, -M_PI);
 
     }];
 

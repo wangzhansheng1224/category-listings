@@ -27,13 +27,18 @@ static NSString * const JPHeaderId = @"header";
 @implementation ViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _first=YES;
+    //导航栏设置
     self.title=@"全部分类";
     self.navigationController.navigationBar.barTintColor=[UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes=@{NSFontAttributeName:[UIFont fontWithName:@"Geeza Pro" size:17.0],NSForegroundColorAttributeName:[UIColor colorWithWhite:0.3 alpha:1]};
     
+    //读取数据文件
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"RecipesCatalog" ofType:@"plist"];
     _classifyArr = [NSArray arrayWithContentsOfFile:plistPath][0];
     
+    //创建tableView
     self.tableView = [[UITableView alloc]initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
     self.tableView.delegate=self;
     self.tableView.dataSource=self;
@@ -46,7 +51,7 @@ static NSString * const JPHeaderId = @"header";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (!_first) {
+    if (_first) {
         if (_NowNum-1000==section) {
             return 1;
         }
@@ -63,24 +68,29 @@ static NSString * const JPHeaderId = @"header";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 10;
+    return _classifyArr.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    //计算Cell高度(根据cell内容数量)
     NSArray *abc=_classifyArr[indexPath.section][@"tags"];
     return ((abc.count-1)/3+1)*50+10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    //解决cell复用问题
     NSString *CellIdentifier = [NSString stringWithFormat:@"Cell%ld%ld",indexPath.section,indexPath.row];//以indexPath来唯一确定cell
     
     WZSTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[WZSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    //给Cell增加数据
     cell.detailArr=_classifyArr[indexPath.section][@"tags"];
+    //需要在数据赋值之后在创建Button
     [cell createButton];
+    //cell点击无效果
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -94,6 +104,7 @@ static NSString * const JPHeaderId = @"header";
     header.groupLabel.text=_classifyArr[section][@"name"];
     NSString *url=_classifyArr[section][@"icon_f"];
     [header.groupLeftV sd_setImageWithURL:[NSURL URLWithString:url]];
+    //为了使记录点击了哪个组头
     header.tag=section+1000;
     header.delegate=self;
     return header;
@@ -101,36 +112,51 @@ static NSString * const JPHeaderId = @"header";
 
 -(void)AddOrDelete:(NSInteger)tag{
     _NowNum=tag;
-    if (!_first) {
-        NSMutableArray* rowToInsert = [[NSMutableArray alloc] init];
-        NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
+    if (_first) {
+        
+        //增加Cell
+        NSMutableArray * rowToInsert = [[NSMutableArray alloc] init];
+        NSIndexPath * indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
         [rowToInsert addObject:indexPathToInsert];
         [self.tableView beginUpdates];
         [self.tableView insertRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
+        
         _LastNum=_NowNum;
-        _first=YES;
-        NSIndexPath* aaaa = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
-        [self.tableView scrollToRowAtIndexPath:aaaa atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        _first=NO;
+        
+        //滑动tableView到点击的section位置
+        NSIndexPath* currentSection = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
+        [self.tableView scrollToRowAtIndexPath:currentSection atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        
         return;
     }
     if (_NowNum==_LastNum) {
-        NSMutableArray* rowToInsert = [[NSMutableArray alloc] init];
-        NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
-        [rowToInsert addObject:indexPathToInsert];
+        
+        //删除Cell
+        NSMutableArray* rowToDelete = [[NSMutableArray alloc] init];
+        NSIndexPath* indexPathToDelete = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
+        [rowToDelete addObject:indexPathToDelete];
         [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView deleteRowsAtIndexPaths:rowToDelete withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
-        _first=NO;
+        
+        //变为初始化状态
+        _first=YES;
+        
     }else{
+        
+        //删除Cell
+        NSMutableArray* rowToDelete = [[NSMutableArray alloc] init];
+        NSIndexPath* indexPathToDelete = [NSIndexPath indexPathForRow:0 inSection:_LastNum-1000];
+        [rowToDelete addObject:indexPathToDelete];
+        
+        //增加Cell
         NSMutableArray* rowToInsert = [[NSMutableArray alloc] init];
         NSIndexPath* indexPathToInsert = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
         [rowToInsert addObject:indexPathToInsert];
         
-        NSMutableArray* rowToInsert2 = [[NSMutableArray alloc] init];
-        NSIndexPath* indexPathToInsert2 = [NSIndexPath indexPathForRow:0 inSection:_LastNum-1000];
-        [rowToInsert2 addObject:indexPathToInsert2];
-        
+        //让上一个点击Cell变为初始状态
         JPCommentHeaderView *header = [self.view viewWithTag:_LastNum];
         [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionTransitionNone animations:^{
             CGAffineTransform currentTransform = header.groupImageV.transform;
@@ -138,17 +164,20 @@ static NSString * const JPHeaderId = @"header";
             CGAffineTransform newTransform = CGAffineTransformRotate(currentTransform, -M_PI);
             header.groupImageV.transform = newTransform;
         }completion:nil];
+        
+        //开始增加和删除Cell
         [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:rowToDelete withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView insertRowsAtIndexPaths:rowToInsert withRowAnimation:UITableViewRowAnimationTop];
-        [self.tableView deleteRowsAtIndexPaths:rowToInsert2 withRowAnimation:UITableViewRowAnimationTop];
         [self.tableView endUpdates];
+        
         _LastNum=_NowNum;
+        
+        //tableView滑动到点击Section的位置
         NSIndexPath* currentSection = [NSIndexPath indexPathForRow:0 inSection:_NowNum-1000];
         [self.tableView scrollToRowAtIndexPath:currentSection atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

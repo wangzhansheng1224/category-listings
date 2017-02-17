@@ -16,5 +16,5 @@
 @property (nonatomic, strong) UILabel * groupLabel;
 @property (nonatomic, strong) UIImageView *groupImageV;
 @property (nonatomic, strong) UIImageView *groupLeftV;
-@property (nonatomic,weak) id<SectionDelegate>delegate;
+@property (nonatomic, weak) id<SectionDelegate>delegate;
 @end
